@@ -1,13 +1,12 @@
 import fastify from "fastify";
-import DatabaseMemory from "./database-memory.js";
+import DatabasePostgres from "./database-postgres.js";
 
 const server = fastify();
-const db = new DatabaseMemory();
+const db = new DatabasePostgres();
 
 // Rotas
-server.get("/videos", (request, reply) => {
+server.get("/videos", (request) => {
   const search = request.query.search;
-
   const videos = db.list(search);
 
   return videos;
@@ -29,7 +28,7 @@ server.put("/videos/:id", (request, reply) => {
   const videoId = request.params.id;
   const { title, description, duration } = request.body;
 
-  const video = db.update(videoId, {
+  db.update(videoId, {
     title,
     description,
     duration,
